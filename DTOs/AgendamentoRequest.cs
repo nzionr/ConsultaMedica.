@@ -1,3 +1,4 @@
+
 namespace ConsultaMedica.DTOs
 {
     public class AgendamentoRequest
@@ -6,3 +7,10 @@ namespace ConsultaMedica.DTOs
         public DateTime Data { get; set; }
     }
 }
+
+public class AgendamentoRequest
+{
+    public string IdPaciente { get; set; }
+    public DateTime DataConsulta { get; set; }
+}
+
