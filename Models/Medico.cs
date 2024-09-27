@@ -1,6 +1,9 @@
-public class Medico
+namespace ConsultaMedica.Models
 {
-    public string ID { get; set; }
-    public string Nome { get; set; }
-    public string Especialidade { get; set; }
+    public class Medico
+    {
+        public string Id { get; set; }
+        public string Nome { get; set; }
+        public string Especialidade { get; set; }
+    }
 }

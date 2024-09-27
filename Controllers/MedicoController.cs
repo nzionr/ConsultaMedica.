@@ -1,24 +1,33 @@
+using ConsultaMedica.Models;
+using ConsultaMedica.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
-public class MedicoController : ControllerBase
+namespace ConsultaMedica.Controllers
 {
-    private AgendamentoService _agendamentoService;
-
-    public MedicoController(AgendamentoService agendamentoService)
+    [ApiController]
+    [Route("api/[controller]")]
+    public class MedicoController : ControllerBase
     {
-        _agendamentoService = agendamentoService;
-    }
+        private readonly IMedicoService _medicoService;
 
-    [HttpPost("{idMedico}/agendamento")]
-    public IActionResult CriarAgendamento(string idMedico, [FromBody] AgendamentoRequest request)
-    {
-        var agendamento = _agendamentoService.CriarAgendamento(request.IdPaciente, idMedico, request.Data);
-
-        if (agendamento == null)
+        public MedicoController(IMedicoService medicoService)
         {
-            return BadRequest("Falha ao criar agendamento.");
+            _medicoService = medicoService;
         }
 
-        return Ok(agendamento);
+        [HttpGet("{id}")]
+        public ActionResult<Medico> GetMedicoById(string id)
+        {
+            var medico = _medicoService.GetMedicoById(id);
+            return Ok(medico);
+        }
+
+        [HttpGet("especialidades/{especialidade}")]
+        public ActionResult<IEnumerable<Medico>> GetMedicosByEspecialidade(string especialidade)
+        {
+            var medicos = _medicoService.GetMedicosByEspecialidade(especialidade);
+            return Ok(medicos);
+        }
     }
 }

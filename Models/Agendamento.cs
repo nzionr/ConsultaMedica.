@@ -1,7 +1,12 @@
-public class Agendamento
+using System;
+
+namespace ConsultaMedica.Models
 {
-    public string ID { get; set; }
-    public Paciente Paciente { get; set; }
-    public Medico Medico { get; set; }
-    public DateTime Data { get; set; }
+    public class Agendamento
+    {
+        public string Id { get; set; }
+        public Paciente Paciente { get; set; }
+        public Medico Medico { get; set; }
+        public DateTime Data { get; set; }
+    }
 }

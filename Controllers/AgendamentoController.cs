@@ -1,32 +1,33 @@
+using ConsultaMedica.DTOs;
+using ConsultaMedica.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
-public class AgendamentoController : ControllerBase
+namespace ConsultaMedica.Controllers
 {
-    private AgendamentoService _agendamentoService;
-    private MedicoService _medicoService;
-
-    public AgendamentoController(AgendamentoService agendamentoService, MedicoService medicoService)
+    [ApiController]
+    [Route("api/[controller]")]
+    public class AgendamentoController : ControllerBase
     {
-        _agendamentoService = agendamentoService;
-        _medicoService = medicoService;
-    }
+        private readonly IAgendamentoService _agendamentoService;
 
-    [HttpPost("{nomeEspecialidade}/agendamento")]
-    public IActionResult CriarAgendamentoPorEspecialidade(string nomeEspecialidade, [FromBody] AgendamentoRequest request)
-    {
-        var medico = _medicoService.ObterMedicoPorEspecialidade(nomeEspecialidade);
-        if (medico == null)
+        public AgendamentoController(IAgendamentoService agendamentoService)
         {
-            return NotFound("Nenhum médico disponível para essa especialidade.");
+            _agendamentoService = agendamentoService;
         }
 
-        var agendamento = _agendamentoService.CriarAgendamento(request.IdPaciente, medico.ID, request.Data);
-
-        if (agendamento == null)
+        [HttpPost("medicos/{medicoId}/agendamento")]
+        public async Task<IActionResult> AgendarConsulta(string medicoId, AgendamentoRequest request)
         {
-            return BadRequest("Falha ao criar agendamento.");
+            var agendamento = await _agendamentoService.AgendarConsulta(medicoId, request);
+            return Ok(agendamento);
         }
 
-        return Ok(agendamento);
+        [HttpPost("especialidades/{especialidade}/agendamento")]
+        public async Task<IActionResult> AgendarConsultaPorEspecialidade(string especialidade, AgendamentoRequest request)
+        {
+            var agendamento = await _agendamentoService.AgendarConsultaPorEspecialidade(especialidade, request);
+            return Ok(agendamento);
+        }
     }
 }
