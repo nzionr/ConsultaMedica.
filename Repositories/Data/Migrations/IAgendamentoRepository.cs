@@ -1,27 +1,16 @@
-using ConsultaMedica.Data;
 using ConsultaMedica.Models;
-using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 
 namespace ConsultaMedica.Repositories
 {
-    public class AgendamentoRepository : IAgendamentoRepository
+    public interface IAgendamentoRepository
     {
-        private readonly AppDbContext _context;
-
-        public AgendamentoRepository(AppDbContext context)
-        {
-            _context = context;
-        }
-
-        public void CreateAgendamento(Agendamento agendamento)
-        {
-            _context.Agendamentos.Add(agendamento);
-            _context.SaveChanges();
-        }
-
-        public bool MedicoDisponivel(string idMedico, DateTime data)
-        {
-            return !_context.Agendamentos.Any(a => a.Medico.Id == idMedico && a.Data == data);
-        }
+        bool MedicoDisponivel(string idMedico, DateTime data);
+        void CreateAgendamento(Agendamento agendamento);
+        IEnumerable<Agendamento> GetAgendamentosByPacienteId(string pacienteId);
+        IEnumerable<Agendamento> GetAgendamentosByMedicoId(string medicoId);
+        Agendamento GetAgendamentoById(string agendamentoId);
+        void DeleteAgendamento(Agendamento agendamento);
     }
 }
